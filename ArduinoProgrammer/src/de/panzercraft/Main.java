@@ -12,7 +12,7 @@ package de.panzercraft;
 public class Main {
     
     public static void main(String[] args) {
-        System.out.println("Funz jetzt pls");
+        System.out.println("Es klappt! NetBeans und Eclipse arbeiten nun zusammen, und nicht mehr gegeneinander");
     }
     
 }
