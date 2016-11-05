@@ -7,7 +7,7 @@ package de.panzercraft;
 
 /**
  *
- * @author Paul
+ * @author Paul & Roman
  */
 public class Main {
     
