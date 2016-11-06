@@ -1,4 +1,5 @@
 file=Datei
+edit=Bearbeiten
 exit=Beenden
 restart=Neustart
 extras=Extras
