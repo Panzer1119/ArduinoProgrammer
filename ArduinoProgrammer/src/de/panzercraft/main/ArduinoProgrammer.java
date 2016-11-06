@@ -50,6 +50,7 @@ public class ArduinoProgrammer implements ActionListener, StandardMethods, Windo
     }
     
     private boolean isWorkspace(File file) {
+        //TODO das muss ausgeproggt werden, wenn der workspace mal mit .project files gemacht ist
         return true;
     }
     
