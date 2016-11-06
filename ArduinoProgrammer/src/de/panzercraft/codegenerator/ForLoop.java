@@ -102,12 +102,16 @@ public class ForLoop extends Function {
         try {
             if(countVariable) {
                 if(codegenerator.existsVariableTemp(count_max_name)) {
-                    return String.format("Variable \"%s\" does not exist", count_max_name);
+                    return String.format("Variable \"%s\" does not exist in the for loop", count_max_name);
                 } else {
                     if(operator.isEmpty() || operator == null) {
-                        return "No operator";
+                        return "No operator in the for loop";
                     } else {
-                        return null;
+                        if(endFunction == null) {
+                            return "No end function in the for loop";
+                        } else {
+                            return null;
+                        }
                     }
                 }
             } else {
