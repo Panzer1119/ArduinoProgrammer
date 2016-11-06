@@ -5,6 +5,7 @@
  */
 package de.panzercraft.main;
 
+import de.panzercraft.gui.editor.Editor;
 import jaddon.controller.JAddOnStandard;
 import jaddon.controller.JFrameManager;
 import jaddon.controller.StandardMethods;
@@ -47,6 +48,9 @@ public class ArduinoProgrammer implements ActionListener, StandardMethods, Windo
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        Editor editor = new Editor(frame, "Lol");
+        editor.setVisible(true);
+        editor.addTab("TestTab");
     }
     
     private boolean isWorkspace(File file) {
