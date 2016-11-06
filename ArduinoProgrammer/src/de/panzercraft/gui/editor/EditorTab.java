@@ -5,6 +5,7 @@
  */
 package de.panzercraft.gui.editor;
 
+import jaddon.controller.StaticStandard;
 import javax.swing.JEditorPane;
 import javax.swing.JScrollPane;
 
@@ -51,6 +52,24 @@ public class EditorTab {
             isAdded = true;
             return false;
         }
+    }
+    
+    public Editor moveToEditor(Editor editor) {
+        try {
+            delete();
+            editor.addTab(this);
+        } catch (Exception ex) {
+            StaticStandard.logErr("Error while moving editortab: " + ex, ex);
+        }
+        return editor;
+    }
+    
+    public String getText() {
+        return ep.getText();
+    }
+    
+    public String getSelectedText() {
+        return ep.getSelectedText();
     }
 
     public Editor getEditor() {

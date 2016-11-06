@@ -61,6 +61,20 @@ public class Editor extends JFrameManager implements ActionListener, WindowListe
         }
     }
     
+    public EditorTab addTab(EditorTab editortab) {
+        try {
+            editortab.setEditor(this);
+            editortabs.add(editortab);
+            editortab.add();
+            updateAll();
+            return editortab;
+        } catch (Exception ex) {
+            updateAll();
+            StaticStandard.logErr("Error while adding editortab to editor: " + ex, ex);
+            return null;
+        }
+    }
+    
     public EditorTab getSelectedEditorTab() {
         try {
             for(EditorTab editortab : editortabs) {
