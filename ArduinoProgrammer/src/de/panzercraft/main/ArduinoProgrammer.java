@@ -10,6 +10,7 @@ import jaddon.controller.JAddOnStandard;
 import jaddon.controller.JFrameManager;
 import jaddon.controller.StandardMethods;
 import jaddon.controller.StaticStandard;
+import jaddon.utils.JUtils;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -18,6 +19,9 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import javax.swing.JFileChooser;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 /**
@@ -31,6 +35,10 @@ public class ArduinoProgrammer implements ActionListener, StandardMethods, Windo
     
     private final JFrameManager frame = new JFrameManager(PROGRAMNAME, VERSION);
     private final JAddOnStandard standard = new JAddOnStandard(PROGRAMNAME, VERSION, true, true, false, true, true);
+    private final JMenuBar MB = new JMenuBar();
+    private final JMenu M1 = new JMenu("File");
+    private final JMenuItem M1I1 = new JMenuItem("Exit");
+    private final JMenuItem M1I2 = new JMenuItem("Restart");
     
     private File workspace_dir = null;
     
@@ -40,10 +48,20 @@ public class ArduinoProgrammer implements ActionListener, StandardMethods, Windo
         init();
         reloadConfig();
         reloadLang();
+        initAfter();
+    }
+    
+    private void initAfter() {
         frame.setDefaultCloseOperation(JFrameManager.DO_NOTHING_ON_CLOSE);
         frame.setLayout(new BorderLayout());
-        frame.setSize(new Dimension(600, 400));
+        frame.setSize(new Dimension(800, 600));
         frame.addWindowListener(this);
+        M1I1.addActionListener(this);
+        M1I2.addActionListener(this);
+        M1.add(M1I2);
+        M1.add(M1I1);
+        MB.add(M1);
+        frame.setJMenuBar(MB);
         
         frame.pack();
         frame.setLocationRelativeTo(null);
@@ -154,10 +172,11 @@ public class ArduinoProgrammer implements ActionListener, StandardMethods, Windo
         StaticStandard.getLang().setLang(StaticStandard.getConfig().getProperty("lang", "EN"));
         StaticStandard.getLang().reloadLang();
         StaticStandard.getLogger().update();
+        //send.setText(StaticStandard.getLang().getLang("send", "Send"));
+        //M1.setText(StaticStandard.getLang().getLang("chat", "Chat"));
+        
+        M1.setText(StaticStandard.getLang().getLang("file", "File"));
         /*
-        send.setText(StaticStandard.getLang().getLang("send", "Send"));
-        M1.setText(StaticStandard.getLang().getLang("chat", "Chat"));
-        M2.setText(StaticStandard.getLang().getLang("file", "File"));
         M3.setText(StaticStandard.getLang().getLang("extras", "Extras"));
 
         M1I1.setText(StaticStandard.getLang().getLang("add_new_chat", "Add New Chat"));
@@ -166,9 +185,11 @@ public class ArduinoProgrammer implements ActionListener, StandardMethods, Windo
         M1I4.setText(StaticStandard.getLang().getLang("join_chat", "Join Chat"));
         M1I5.setText(StaticStandard.getLang().getLang("connect_to_server", "Connect to Server"));
         M1I6.setText(StaticStandard.getLang().getLang("join_server", "Join Server"));
-
-        M2I1.setText(StaticStandard.getLang().getLang("exit", "Exit"));
-        M2I2.setText(StaticStandard.getLang().getLang("restart", "Restart"));
+        */
+        
+        M1I1.setText(StaticStandard.getLang().getLang("exit", "Exit"));
+        M1I2.setText(StaticStandard.getLang().getLang("restart", "Restart"));
+        /*
         M2I3.setText(StaticStandard.getLang().getLang("send_file", "Send File"));
 
         M3I1.setText(StaticStandard.getLang().getLang("settings", "Settings"));
@@ -190,8 +211,10 @@ public class ArduinoProgrammer implements ActionListener, StandardMethods, Windo
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == null) {
-            
+        if(e.getSource() == M1I1) {
+            exit();
+        } else if(e.getSource() == M1I2) {
+            JUtils.restart();
         }
     }
 

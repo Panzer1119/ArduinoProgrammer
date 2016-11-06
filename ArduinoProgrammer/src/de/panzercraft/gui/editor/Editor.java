@@ -87,13 +87,26 @@ public class Editor extends JFrameManager {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        splitpane = new javax.swing.JSplitPane();
         tabbedpane = new javax.swing.JTabbedPane();
+        sp_console = new javax.swing.JScrollPane();
+        console = new javax.swing.JEditorPane();
         menubar = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        getContentPane().add(tabbedpane, java.awt.BorderLayout.CENTER);
+
+        splitpane.setDividerLocation(220);
+        splitpane.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+        splitpane.setLeftComponent(tabbedpane);
+
+        console.setEditable(false);
+        sp_console.setViewportView(console);
+
+        splitpane.setRightComponent(sp_console);
+
+        getContentPane().add(splitpane, java.awt.BorderLayout.CENTER);
 
         jMenu1.setText("File");
         menubar.add(jMenu1);
@@ -119,9 +132,12 @@ public class Editor extends JFrameManager {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JEditorPane console;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     public javax.swing.JMenuBar menubar;
+    private javax.swing.JScrollPane sp_console;
+    private javax.swing.JSplitPane splitpane;
     public javax.swing.JTabbedPane tabbedpane;
     // End of variables declaration//GEN-END:variables
 }
