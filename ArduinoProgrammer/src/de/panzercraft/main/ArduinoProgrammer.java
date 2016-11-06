@@ -83,7 +83,7 @@ public class ArduinoProgrammer implements ActionListener, StandardMethods, Windo
         editor.addTab("TestTab");
         Codegenerator codegenerator = new Codegenerator();
         Function function = new Function(codegenerator, "");
-        Variable variable = new Variable("int", "z", 0);
+        Variable variable = new Variable(codegenerator, "int", "z", 0);
         function.setVariable(variable);
         codegenerator.addFunction(function);
         Function trolltest = new Function(codegenerator, "//test;");

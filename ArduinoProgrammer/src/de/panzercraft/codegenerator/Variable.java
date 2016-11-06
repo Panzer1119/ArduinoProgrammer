@@ -11,14 +11,17 @@ package de.panzercraft.codegenerator;
  */
 public class Variable {
     
+    private final Codegenerator codegenerator;
     private final String type;
     private final String name;
     private Object value;
     
-    public Variable(String type, String name, Object value) {
+    public Variable(Codegenerator codegenerator, String type, String name, Object value) {
+        this.codegenerator = codegenerator;
         this.type = type;
         this.name = name;
         this.value = value;
+        codegenerator.getVariables().add(this);
     }
 
     public String getType() {

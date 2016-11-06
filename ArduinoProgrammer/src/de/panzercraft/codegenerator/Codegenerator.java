@@ -115,6 +115,8 @@ public class Codegenerator {
             try {
                 function.enable();
                 code += function + "\n";
+                Thread.sleep(10);
+                StaticStandard.log(variables_temp.size());
             } catch (Exception ex) {
             }
         }
