@@ -18,7 +18,7 @@ import java.awt.event.WindowListener;
 
 /**
  *
- * @author Paul
+ * @author Paul & Roman
  */
 public class ArduinoProgrammer implements ActionListener, StandardMethods, WindowListener {
     
