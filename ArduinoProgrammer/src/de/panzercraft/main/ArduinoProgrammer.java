@@ -5,6 +5,10 @@
  */
 package de.panzercraft.main;
 
+import de.panzercraft.codegenerator.Codegenerator;
+import de.panzercraft.codegenerator.ForLoop;
+import de.panzercraft.codegenerator.Function;
+import de.panzercraft.codegenerator.Variable;
 import de.panzercraft.gui.editor.Editor;
 import jaddon.controller.JAddOnStandard;
 import jaddon.controller.JFrameManager;
@@ -70,9 +74,30 @@ public class ArduinoProgrammer implements ActionListener, StandardMethods, Windo
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        test();
+    }
+    
+    private void test() {
         Editor editor = openEditor(frame, "TestEditor");
         editor.setVisible(true);
         editor.addTab("TestTab");
+        Codegenerator codegenerator = new Codegenerator();
+        Function function = new Function(codegenerator, "");
+        Variable variable = new Variable("int", "z", 0);
+        function.setVariable(variable);
+        codegenerator.addFunction(function);
+        Function trolltest = new Function(codegenerator, "//test;");
+        codegenerator.addFunction(trolltest);
+        ForLoop loop = new ForLoop(codegenerator, "i");
+        loop.setCountVariable(true);
+        loop.setCountMaxName("z");
+        loop.setOperator("<");
+        loop.setEndFunction(new Function(codegenerator, "i++;"));
+        loop.addFunction(trolltest);
+        loop.addFunction(trolltest);
+        loop.addFunction(trolltest);
+        codegenerator.addFunction(loop);
+        StaticStandard.log("CODE: \n" + codegenerator.generateCode());
     }
     
     private boolean isWorkspace(File file) {
