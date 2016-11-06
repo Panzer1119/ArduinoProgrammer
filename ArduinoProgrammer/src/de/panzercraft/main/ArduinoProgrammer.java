@@ -3,18 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.panzercraft;
-
-import de.panzercraft.main.ArduinoProgrammer;
+package de.panzercraft.main;
 
 /**
  *
- * @author Paul & Roman
+ * @author Paul
  */
-public class Main {
+public class ArduinoProgrammer {
     
-    public static void main(String[] args) {
-        ArduinoProgrammer x = new ArduinoProgrammer();
+    public ArduinoProgrammer() {
+        
     }
     
 }
