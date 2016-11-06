@@ -12,12 +12,14 @@ import jaddon.controller.StandardMethods;
 import jaddon.controller.StaticStandard;
 import jaddon.utils.JUtils;
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -39,6 +41,8 @@ public class ArduinoProgrammer implements ActionListener, StandardMethods, Windo
     private final JMenu M1 = new JMenu("File");
     private final JMenuItem M1I1 = new JMenuItem("Exit");
     private final JMenuItem M1I2 = new JMenuItem("Restart");
+    
+    public static final ArrayList<Editor> editors = new ArrayList<>();
     
     private File workspace_dir = null;
     
@@ -66,7 +70,7 @@ public class ArduinoProgrammer implements ActionListener, StandardMethods, Windo
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        Editor editor = new Editor(frame, "Lol");
+        Editor editor = openEditor(frame, "TestEditor");
         editor.setVisible(true);
         editor.addTab("TestTab");
     }
@@ -74,6 +78,12 @@ public class ArduinoProgrammer implements ActionListener, StandardMethods, Windo
     private boolean isWorkspace(File file) {
         //TODO das muss ausgeproggt werden, wenn der workspace mal mit .project files gemacht ist
         return true;
+    }
+    
+    public Editor openEditor(Component c, String title) {
+        Editor editor = new Editor(c, title);
+        reloadLangEditors();
+        return editor;
     }
     
     private void createWorkspace() {
@@ -166,12 +176,31 @@ public class ArduinoProgrammer implements ActionListener, StandardMethods, Windo
         return true;
     }
     
+    private void reloadLangEditors() {
+        try {
+            StaticStandard.getConfig().reloadConfig();
+            StaticStandard.getLang().setLang(StaticStandard.getConfig().getProperty("lang", "EN"));
+            StaticStandard.getLang().reloadLang();
+            StaticStandard.getLogger().update();
+            for(Editor editor : editors) {
+                try {
+                    editor.M1.setText(StaticStandard.getLang().getLang("file", "File"));
+                    editor.M2.setText(StaticStandard.getLang().getLang("edit", "Edit"));
+                    editor.M1I1.setText(StaticStandard.getLang().getLang("exit", "Exit"));
+                } catch (Exception ex) {
+                }
+            }
+        } catch (Exception ex) {
+        }
+    }
+    
     @Override
     public boolean reloadLang() {
         StaticStandard.getConfig().reloadConfig();
         StaticStandard.getLang().setLang(StaticStandard.getConfig().getProperty("lang", "EN"));
         StaticStandard.getLang().reloadLang();
         StaticStandard.getLogger().update();
+        reloadLangEditors();
         //send.setText(StaticStandard.getLang().getLang("send", "Send"));
         //M1.setText(StaticStandard.getLang().getLang("chat", "Chat"));
         

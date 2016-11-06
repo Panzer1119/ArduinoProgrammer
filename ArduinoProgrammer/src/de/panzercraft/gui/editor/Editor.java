@@ -5,18 +5,23 @@
  */
 package de.panzercraft.gui.editor;
 
+import de.panzercraft.main.ArduinoProgrammer;
 import static de.panzercraft.main.ArduinoProgrammer.VERSION;
 import jaddon.controller.JFrameManager;
 import jaddon.controller.StaticStandard;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
 
 /**
  *
  * @author Paul
  */
-public class Editor extends JFrameManager {
+public class Editor extends JFrameManager implements ActionListener, WindowListener {
     
     private final ArrayList<EditorTab> editortabs = new ArrayList<>();
     private int pre_work_title = -1;
@@ -29,13 +34,17 @@ public class Editor extends JFrameManager {
         super(title, VERSION);
         initComponents();
         init(c);
+        ArduinoProgrammer.editors.add(this);
     }
     
     private void init(Component c) {
         setSize(new Dimension(600, 400));
+        setDefaultCloseOperation(JFrameManager.DO_NOTHING_ON_CLOSE);
+        addWindowListener(this);
         pack();
         setLocationRelativeTo(c);
         updateAll();
+        M1I1.addActionListener(this);
     }
     
     public EditorTab addTab(String name) {
@@ -78,6 +87,24 @@ public class Editor extends JFrameManager {
         }
     }
     
+    public boolean remove() {
+        try {
+            ArduinoProgrammer.editors.remove(this);
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+    
+    public void exit() {
+        remove();
+        close();
+    }
+    
+    public void close() {
+        dispose();
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -91,9 +118,10 @@ public class Editor extends JFrameManager {
         tabbedpane = new javax.swing.JTabbedPane();
         sp_console = new javax.swing.JScrollPane();
         console = new javax.swing.JEditorPane();
-        menubar = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
+        MB = new javax.swing.JMenuBar();
+        M1 = new javax.swing.JMenu();
+        M1I1 = new javax.swing.JMenuItem();
+        M2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -108,13 +136,17 @@ public class Editor extends JFrameManager {
 
         getContentPane().add(splitpane, java.awt.BorderLayout.CENTER);
 
-        jMenu1.setText("File");
-        menubar.add(jMenu1);
+        M1.setText("File");
 
-        jMenu2.setText("Edit");
-        menubar.add(jMenu2);
+        M1I1.setText("Exit");
+        M1.add(M1I1);
 
-        setJMenuBar(menubar);
+        MB.add(M1);
+
+        M2.setText("Edit");
+        MB.add(M2);
+
+        setJMenuBar(MB);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -132,12 +164,51 @@ public class Editor extends JFrameManager {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public javax.swing.JMenu M1;
+    public javax.swing.JMenuItem M1I1;
+    public javax.swing.JMenu M2;
+    public javax.swing.JMenuBar MB;
     private javax.swing.JEditorPane console;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    public javax.swing.JMenuBar menubar;
     private javax.swing.JScrollPane sp_console;
     private javax.swing.JSplitPane splitpane;
     public javax.swing.JTabbedPane tabbedpane;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == M1I1) {
+            exit();
+        }
+    }
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        if(e.getSource() == this) {
+            exit();
+        }
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+    }
 }
