@@ -15,6 +15,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -27,6 +30,8 @@ public class ArduinoProgrammer implements ActionListener, StandardMethods, Windo
     
     private final JFrameManager frame = new JFrameManager(PROGRAMNAME, VERSION);
     private final JAddOnStandard standard = new JAddOnStandard(PROGRAMNAME, VERSION, true, true, false, true, true);
+    
+    private File workspace_dir = null;
     
     private boolean init = false;
     
@@ -42,6 +47,50 @@ public class ArduinoProgrammer implements ActionListener, StandardMethods, Windo
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+    }
+    
+    private boolean isWorkspace(File file) {
+        return true;
+    }
+    
+    private void createWorkspace() {
+        final File workspace_dir_old = workspace_dir;
+        JFileChooser fc = new JFileChooser();
+        fc.setCurrentDirectory(workspace_dir);
+        fc.setMultiSelectionEnabled(false);
+        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        boolean run = true;
+        while(run) {
+            int result = fc.showDialog(frame, StaticStandard.getLang().getLang("workspace_dir_selection", "Set as workspace"));
+            if(result == JFileChooser.APPROVE_OPTION) {
+                File file = ((fc.getSelectedFile() != null) ? fc.getSelectedFile() : fc.getCurrentDirectory());
+                boolean good = false;
+                if(isWorkspace(file)) {
+                    good = true;
+                } else {
+                    if(file.listFiles().length > 0) {
+                        int input = JOptionPane.showConfirmDialog(frame, StaticStandard.getLang().getLang("workspace_dir_selection_not_empty", "Directory is not empty, do you want to use it as your workspace?"), StaticStandard.getLang().getLang("workspace_dir_selection_not_empty_title", "Warning"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                        if(input == JOptionPane.YES_OPTION) {
+                            good = true;
+                        } else {
+                            good = false;
+                        }
+                    } else {
+                        good = true;
+                    }
+                }
+                if(good) {
+                    workspace_dir = file;
+                    StaticStandard.getConfig().setProperty("workspace_dir", workspace_dir.getAbsolutePath());
+                    StaticStandard.getConfig().saveConfig();
+                    StaticStandard.log(String.format("Set \"%s\" as workspace", workspace_dir.getAbsolutePath()));
+                    run = false;
+                }
+            } else {
+                run = false;
+                exit();
+            }
+        }
     }
     
     @Override
@@ -60,7 +109,7 @@ public class ArduinoProgrammer implements ActionListener, StandardMethods, Windo
         standard.setDoUpdate(true);
         StaticStandard.getUpdater().setFileTemp(StaticStandard.getConfig().getTempFolder());
         StaticStandard.getUpdater().loadURLsFromInternResource("/de/panzercraft/urls/updaterURLs.txt");
-        StaticStandard.getConfig().setDefaultConfig(new String[] {"lang"}, new String[] {"EN"});
+        StaticStandard.getConfig().setDefaultConfig(new String[] {"lang", "workspace_dir"}, new String[] {"EN", "null"});
         StaticStandard.getLang().setClassReference(ArduinoProgrammer.class);
         StaticStandard.getLang().setFile("/de/panzercraft/lang");
         StaticStandard.getConfig().reloadConfig();
@@ -82,6 +131,15 @@ public class ArduinoProgrammer implements ActionListener, StandardMethods, Windo
     public boolean reloadConfig() {
         StaticStandard.getConfig().reloadConfig();
         StaticStandard.getLang().setLang(StaticStandard.getConfig().getProperty("lang", "EN"));
+        try {
+            String workspace_dir_string = StaticStandard.getConfig().getProperty("workspace_dir", "null");
+            if(workspace_dir_string == null || workspace_dir_string.equalsIgnoreCase("null") || workspace_dir_string.isEmpty()) {
+                createWorkspace();
+            } else {
+                workspace_dir = new File(workspace_dir_string);
+            }
+        } catch (Exception ex) {
+        }
         return true;
     }
     
@@ -119,7 +177,7 @@ public class ArduinoProgrammer implements ActionListener, StandardMethods, Windo
     @Override
     public void exit() {
         try {
-            
+            StaticStandard.getConfig().saveConfig();
         } catch (Exception ex) {
         }
         StaticStandard.exit();

@@ -121,3 +121,6 @@ remove=Entfernen
 save=Speichern
 name=Name
 use=Benutzen
+workspace_dir_selection=Als Arbeitsplatz setzen
+workspace_dir_selection_not_empty=Der Ordner ist nicht leer, möchtest du ihn trotzdem als Arbeitsplatz benutzen?
+workspace_dir_selection_not_empty_title=Warnung

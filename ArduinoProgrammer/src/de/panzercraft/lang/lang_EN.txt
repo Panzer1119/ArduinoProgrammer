@@ -121,3 +121,6 @@ remove=Remove
 save=Save
 name=Name
 use=Use
+workspace_dir_selection=Set as workspace
+workspace_dir_selection_not_empty=Directory is not empty, do you want to use it as your workspace?
+workspace_dir_selection_not_empty_title=Warning
